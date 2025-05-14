@@ -50,7 +50,7 @@ long getLocaleIndex(unsigned int *index, IDWriteLocalizedStrings *strings) {
   return 0;
 }
 
-unsigned int getLocaleIndexByName(unsigned int *index, IDWriteLocalizedStrings *strings, wchar_t* localeName) {
+unsigned int getLocaleIndexByName(unsigned int *index, IDWriteLocalizedStrings *strings, const wchar_t* localeName) {
   BOOL exists = false;
 
   // If the default locale is returned, find that locale name, otherwise use "en-us".
@@ -67,7 +67,7 @@ unsigned int getLocaleIndexByName(unsigned int *index, IDWriteLocalizedStrings *
   return 0;
 }
 
-unsigned int getLocaleIndexByName(IDWriteLocalizedStrings *strings, wchar_t* localeName) {
+unsigned int getLocaleIndexByName(IDWriteLocalizedStrings *strings, const wchar_t* localeName) {
   unsigned int index = 0;
   BOOL exists = false;
 
@@ -86,7 +86,7 @@ unsigned int getLocaleIndexByName(IDWriteLocalizedStrings *strings, wchar_t* loc
 }
 
 // gets a localized string for a font
-long getString(char **out, IDWriteFont *font, DWRITE_INFORMATIONAL_STRING_ID string_id, bool isLanguageSpecified = false, wchar_t* localeName = L"ja-jp") {
+long getString(char **out, IDWriteFont *font, DWRITE_INFORMATIONAL_STRING_ID string_id, bool isLanguageSpecified = false, const wchar_t* localeName = L"ja-jp") {
   *out = NULL;
   IDWriteLocalizedStrings *strings = NULL;
 
@@ -210,7 +210,7 @@ long resultFromFont(FontDescriptor **res, IDWriteFont *font) {
 FontManagerImpl::FontManagerImpl() : instance_data(nullptr) {}
 FontManagerImpl::~FontManagerImpl() {}
 
-long FontManagerImpl::getAvailableFonts(ResultSet **resultSet) {
+long FontManagerImpl::getAvailableFonts(ResultSet **resultSet, bool needCache) {
   int count = 0;
 
   IDWriteFactory *factory = NULL;

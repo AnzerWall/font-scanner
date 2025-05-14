@@ -151,7 +151,7 @@ ResultSet *getResultSet(FcFontSet *fs) {
 FontManagerImpl::FontManagerImpl() : instance_data(nullptr) {}
 FontManagerImpl::~FontManagerImpl() {}
 
-long FontManagerImpl::getAvailableFonts(ResultSet **fonts) {
+long FontManagerImpl::getAvailableFonts(ResultSet **fonts, bool needCache) {
   FcInit();
 
   FcPattern *pattern = FcPatternCreate();
