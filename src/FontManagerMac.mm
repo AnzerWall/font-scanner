@@ -5,6 +5,33 @@
 #include "FontDescriptor.h"
 #include "ResultSet.h"
 
+// get localized string
+char* CFStringToUtf8String(CFStringRef str)
+{
+  if(str == NULL){
+    return NULL;
+  }
+  CFIndex max = CFStringGetMaximumSizeForEncoding(CFStringGetLength(str), kCFStringEncodingUTF8) + 1;
+  char* buffer = (char*)malloc(max);
+  if (CFStringGetCString(str, buffer, max, kCFStringEncodingUTF8)) {
+      return buffer;
+  }
+  free(buffer);
+  return NULL;
+}
+
+char* getStringAttribute(CTFontDescriptorRef ref, CFStringRef attr) {
+  return CFStringToUtf8String((CFStringRef)CTFontDescriptorCopyAttribute(ref, attr));
+}
+
+char* getLocalizedAttribute(CTFontDescriptorRef ref, CFStringRef attr, CFStringRef *localized) {
+  CFTypeRef value = CTFontDescriptorCopyLocalizedAttribute(ref, attr, localized);
+  if(value && (CFStringRef)value) {
+    return CFStringToUtf8String((CFStringRef)value);
+  }
+  return getStringAttribute(ref, attr);
+}
+
 // converts a CoreText weight (-1 to +1) to a standard weight (100 to 900)
 static int convertWeight(float weight) {
   if (weight <= -0.8f)
@@ -36,7 +63,7 @@ static int convertWidth(float unit) {
   }
 }
 
-FontDescriptor *getMaybeFontDescriptor(const char *path, const char *postscriptName, const char *family, const char *style,
+FontDescriptor *getMaybeFontDescriptor(const char *path, const char *postscriptName, const char *family, const char *localizedName, const char *enName, const char *style,
   FontWeight weight, FontWidth width, bool italic, bool monospace) {
   if (path == NULL || postscriptName == NULL || family == NULL || style == NULL) {
     return NULL;
@@ -46,6 +73,8 @@ FontDescriptor *getMaybeFontDescriptor(const char *path, const char *postscriptN
     path,
     postscriptName,
     family,
+    localizedName,
+    enName,
     style,
     weight,
     width,
@@ -58,6 +87,8 @@ long createFontDescriptor(FontDescriptor **res, CTFontDescriptorRef descriptor) 
   NSURL *url = (NSURL *) CTFontDescriptorCopyAttribute(descriptor, kCTFontURLAttribute);
   NSString *psName = (NSString *) CTFontDescriptorCopyAttribute(descriptor, kCTFontNameAttribute);
   NSString *family = (NSString *) CTFontDescriptorCopyAttribute(descriptor, kCTFontFamilyNameAttribute);
+  char *localizedName = getLocalizedAttribute(descriptor, kCTFontFamilyNameAttribute, NULL);
+  NSString *enName = (NSString *) CTFontDescriptorCopyAttribute(descriptor, kCTFontFamilyNameAttribute);
   NSString *style = (NSString *) CTFontDescriptorCopyAttribute(descriptor, kCTFontStyleNameAttribute);
 
   NSDictionary *traits = (NSDictionary *) CTFontDescriptorCopyAttribute(descriptor, kCTFontTraitsAttribute);
@@ -74,6 +105,8 @@ long createFontDescriptor(FontDescriptor **res, CTFontDescriptorRef descriptor) 
     [[url path] UTF8String],
     [psName UTF8String],
     [family UTF8String],
+    localizedName,
+    [enName UTF8String],
     [style UTF8String],
     weight,
     width,
@@ -84,6 +117,10 @@ long createFontDescriptor(FontDescriptor **res, CTFontDescriptorRef descriptor) 
   [url release];
   [psName release];
   [family release];
+  if(localizedName != NULL) {
+    free(localizedName);
+  }
+  [enName release];
   [style release];
   [traits release];
   return *res == NULL ? -1 : 0;
@@ -98,13 +135,31 @@ FontManagerImpl::~FontManagerImpl() {
   delete static_cast<DarwinInstanceData *>(instance_data);
 }
 
-long FontManagerImpl::getAvailableFonts(ResultSet **resultSet) {
-  // cache font collection for fast use in future calls
+long FontManagerImpl::getAvailableFonts(ResultSet **resultSet, bool needCache) {
+  // Determine whether to cache the font collection based on the needCache parameter
   DarwinInstanceData *instance_data = static_cast<DarwinInstanceData *>(this->instance_data);
-  if (instance_data->collection == NULL)
-    instance_data->collection = CTFontCollectionCreateFromAvailableFonts(NULL);
-  NSArray *matches = (NSArray *) CTFontCollectionCreateMatchingFontDescriptors(instance_data->collection);
+  CTFontCollectionRef collection = NULL;
 
+  if (needCache && instance_data->collection != NULL) {
+    // If caching is needed and there is a cached font collection, use the cached collection
+    collection = instance_data->collection;
+  } else {
+    // If caching is not needed or there is no cached font collection, create a new font collection
+    collection = CTFontCollectionCreateFromAvailableFonts(NULL);
+
+    if (needCache) {
+      // If caching is needed, update the font collection in the instance data
+      if (instance_data->collection != NULL) {
+        CFRelease(instance_data->collection);
+      }
+      instance_data->collection = collection;
+    }
+  }
+
+  // Get matching font descriptors
+  NSArray *matches = (NSArray *) CTFontCollectionCreateMatchingFontDescriptors(collection);
+
+  // Process the matching font descriptors
   *resultSet = new ResultSet;
   for (id m in matches) {
     CTFontDescriptorRef match = (CTFontDescriptorRef) m;
@@ -115,7 +170,10 @@ long FontManagerImpl::getAvailableFonts(ResultSet **resultSet) {
     }
   }
 
+  // Release the created font collection
+  CFRelease(collection);
   [matches release];
+
   return 0;
 }
 
@@ -138,6 +196,8 @@ CTFontDescriptorRef getFontDescriptor(FontDescriptor *desc) {
     NSString *family = [NSString stringWithUTF8String:desc->family];
     attrs[(id)kCTFontFamilyNameAttribute] = family;
   }
+
+  // localizedName は CTFontDescriptor には不要
 
   if (desc->style) {
     NSString *style = [NSString stringWithUTF8String:desc->style];
