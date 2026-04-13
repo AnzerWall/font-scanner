@@ -37,10 +37,19 @@ You should generally prefer the asynchronous version as it will allow your progr
 processing while a request for fonts is processing in the background, which may be expensive depending on
 the platform APIs that are available.
 
-* [`getAvailableFonts()`](#getavailablefonts)
-* [`findFonts(fontDescriptor)`](#findfontsfontdescriptor)
-* [`findFont(fontDescriptor)`](#findfontfontdescriptor)
-* [`substituteFont(postscriptName, text)`](#substitutefontpostscriptname-text)
+- [@anzerwall/font-scanner](#anzerwallfont-scanner)
+  - [Features](#features)
+  - [Platforms](#platforms)
+  - [Installation](#installation)
+  - [API](#api)
+    - [getAvailableFonts()](#getavailablefonts)
+    - [findFonts(fontDescriptor)](#findfontsfontdescriptor)
+    - [findFont(fontDescriptor)](#findfontfontdescriptor)
+    - [substituteFont(postscriptName, text)](#substitutefontpostscriptname-text)
+    - [Font Descriptor](#font-descriptor)
+      - [Weights](#weights)
+      - [Widths](#widths)
+  - [License](#license)
 
 ### getAvailableFonts()
 
