@@ -11,6 +11,7 @@
   "devDependencies": {
     "commit-and-tag-version": "^12.0.0",
     "mocha": "*",
+    "node-gyp": "^11.0.0",
     "prebuildify": "^6.0.0"
   },
   "binary": {
