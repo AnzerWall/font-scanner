@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.3.4](https://github.com/AnzerWall/font-scanner/compare/v0.3.3...v0.3.4) (2026-04-13)
+
 ## 0.3.3 (2026-04-13)
 
 
