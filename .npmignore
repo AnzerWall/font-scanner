@@ -6,5 +6,6 @@ src/
 binding.gyp
 test/
 .travis.yml
+.versionrc.json
 travis-linux.sh
 travis-osx.sh

@@ -1,4 +1,4 @@
-declare module 'font-scanner' {
+declare module '@anzerwall/font-scanner' {
     export interface FontDescriptor {
         readonly path: string;
         readonly style: string;

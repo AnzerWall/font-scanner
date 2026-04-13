@@ -1,5 +1,5 @@
 {
-  "name": "font-scanner",
+  "name": "@anzerwall/font-scanner",
   "version": "0.3.2",
   "description": "Provides access to the system font catalog",
   "main": "index.js",
@@ -9,6 +9,7 @@
     "node-gyp-build": "^4.8.0"
   },
   "devDependencies": {
+    "commit-and-tag-version": "^12.0.0",
     "mocha": "*",
     "prebuildify": "^6.0.0"
   },
@@ -23,11 +24,15 @@
     "rebuild-debug": "node-gyp rebuild --debug",
     "rebuild-release": "node-gyp rebuild",
     "prebuildify": "prebuildify --napi --strip",
+    "release": "commit-and-tag-version && git push --follow-tags",
+    "release:patch": "commit-and-tag-version --release-as patch && git push --follow-tags",
+    "release:minor": "commit-and-tag-version --release-as minor && git push --follow-tags",
+    "release:major": "commit-and-tag-version --release-as major && git push --follow-tags",
     "test": "mocha"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/axosoft/font-scanner.git"
+    "url": "https://github.com/AnzerWall/font-scanner.git"
   },
   "keywords": [
     "font",
@@ -44,7 +49,7 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/axosoft/font-scanner/issues"
+    "url": "https://github.com/AnzerWall/font-scanner/issues"
   },
-  "homepage": "https://github.com/axosoft/font-scanner"
+  "homepage": "https://github.com/AnzerWall/font-scanner"
 }
