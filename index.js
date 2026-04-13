@@ -1,13 +1,4 @@
-let fontManager;
-try {
-  fontManager = require('./build/Release/fontmanager');
-} catch (releaseNotFoundError) {
-  try {
-    fontManager = require('./build/Debug/fontmanager');
-  } catch (debugNotFoundError) {
-    throw new Error('There is no built binary for font-manager');
-  }
-}
+const fontManager = require('node-gyp-build')(__dirname);
 
 module.exports = {
   findFontSync: (fontDescriptor) => fontManager.findFontSync(fontDescriptor),

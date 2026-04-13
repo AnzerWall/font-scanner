@@ -2,20 +2,27 @@
   "name": "font-scanner",
   "version": "0.3.2",
   "description": "Provides access to the system font catalog",
-  "main": "build/Release/fontmanager",
+  "main": "index.js",
   "types": "index.d.ts",
   "dependencies": {
-    "node-addon-api": "^5.0.0"
+    "node-addon-api": "^5.0.0",
+    "node-gyp-build": "^4.8.0"
   },
   "devDependencies": {
-    "mocha": "*"
+    "mocha": "*",
+    "prebuildify": "^6.0.0"
+  },
+  "binary": {
+    "napi_versions": [8]
   },
   "directories": {
     "test": "test"
   },
   "scripts": {
+    "install": "node-gyp-build-optional",
     "rebuild-debug": "node-gyp rebuild --debug",
     "rebuild-release": "node-gyp rebuild",
+    "prebuildify": "prebuildify --napi --strip",
     "test": "mocha"
   },
   "repository": {

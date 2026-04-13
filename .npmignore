@@ -1,7 +1,10 @@
 .DS_Store
 build/
 node_modules/
+.github/
+src/
+binding.gyp
+test/
 .travis.yml
-appveyor.yml
 travis-linux.sh
 travis-osx.sh

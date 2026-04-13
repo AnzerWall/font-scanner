@@ -1,3 +1,6 @@
 .DS_Store
 build/
+prebuilds/
 node_modules/
+.idea
+.vscode/
