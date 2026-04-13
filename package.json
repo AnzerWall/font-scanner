@@ -1,6 +1,6 @@
 {
   "name": "@anzerwall/font-scanner",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Provides access to the system font catalog",
   "main": "index.js",
   "types": "index.d.ts",
@@ -14,7 +14,9 @@
     "prebuildify": "^6.0.0"
   },
   "binary": {
-    "napi_versions": [8]
+    "napi_versions": [
+      8
+    ]
   },
   "directories": {
     "test": "test"
