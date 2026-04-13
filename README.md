@@ -1,4 +1,4 @@
-# @anzerwall/font-scanner
+# @anzerwall2/font-scanner
 
 A C++ module for Node.js providing access to the system font catalog. Forked from https://github.com/foliojs/font-manager
 
@@ -16,9 +16,9 @@ A C++ module for Node.js providing access to the system font catalog. Forked fro
 
 ## Installation
 
-Installation of the `@anzerwall/font-scanner` module is via npm:
+Installation of the `@anzerwall2/font-scanner` module is via npm:
 
-    npm install --save-dev @anzerwall/font-scanner
+  npm install --save-dev @anzerwall2/font-scanner
 
 On Linux, you also may need to install the `libfontconfig-dev` package, for example:
 
@@ -26,18 +26,18 @@ On Linux, you also may need to install the `libfontconfig-dev` package, for exam
 
 ## API
 
-You load the `@anzerwall/font-scanner` module using `require` as with all Node modules:
+You load the `@anzerwall2/font-scanner` module using `require` as with all Node modules:
 
 ```javascript
-var fontManager = require('@anzerwall/font-scanner');
+var fontManager = require('@anzerwall2/font-scanner');
 ```
 
-All of the methods exported by `@anzerwall/font-scanner` have both synchronous and asynchronous versions available.
+All of the methods exported by `@anzerwall2/font-scanner` have both synchronous and asynchronous versions available.
 You should generally prefer the asynchronous version as it will allow your program to continue doing other
 processing while a request for fonts is processing in the background, which may be expensive depending on
 the platform APIs that are available.
 
-- [@anzerwall/font-scanner](#anzerwallfont-scanner)
+- [@anzerwall2/font-scanner](#anzerwall2font-scanner)
   - [Features](#features)
   - [Platforms](#platforms)
   - [Installation](#installation)

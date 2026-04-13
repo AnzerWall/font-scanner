@@ -1,5 +1,5 @@
 {
-  "name": "@anzerwall/font-scanner",
+  "name": "@anzerwall2/font-scanner",
   "version": "0.3.13",
   "description": "Provides access to the system font catalog",
   "main": "index.js",
@@ -21,6 +21,9 @@
   },
   "directories": {
     "test": "test"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "install": "node-gyp-build-optional",
