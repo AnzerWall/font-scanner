@@ -7,7 +7,7 @@
         "src/FontManager.cc"
       ],
       "include_dirs": [
-        "<!(node -p \"require('node-addon-api').include_dir\")"
+        "<(module_root_dir)/node_modules/node-addon-api"
       ],
       "defines": [
         "NAPI_DISABLE_CPP_EXCEPTIONS",
