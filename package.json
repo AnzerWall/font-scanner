@@ -1,6 +1,6 @@
 {
   "name": "@anzerwall/font-scanner",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "description": "Provides access to the system font catalog",
   "main": "index.js",
   "types": "index.d.ts",
