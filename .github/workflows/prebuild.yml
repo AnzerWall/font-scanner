@@ -14,10 +14,12 @@ jobs:
         include:
           - os: windows-latest
             name: win32-x64
-          - os: macos-13
+          - os: macos-latest
             name: darwin-x64
+            arch: x64
           - os: macos-latest
             name: darwin-arm64
+            arch: arm64
 
     name: Build ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
@@ -33,7 +35,7 @@ jobs:
         run: npm install --ignore-scripts
 
       - name: Prebuild native module
-        run: node ./node_modules/prebuildify/bin.js --napi --strip
+        run: npx prebuildify --napi --strip ${{ matrix.arch && format('--arch={0}', matrix.arch) || '' }}
 
       - name: Upload prebuilds
         uses: actions/upload-artifact@v4
